@@ -27,5 +27,8 @@
     "eslint": "^9.15.0",
     "prettier": "^3.4.1"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "enquirer": "^2.4.1"
+  }
 }
