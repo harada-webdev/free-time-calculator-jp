@@ -62,3 +62,35 @@ function isValidNumberOfHolidays(input, state) {
 function isValidTotalHolidays(input, totalDays, holidays) {
   return totalDays - input - (holidays || 0) >= 0;
 }
+
+export function validateTime(input, times) {
+  if (!isValidTimeFormat(input)) {
+    return "時間と分を : で区切ってください";
+  }
+
+  if (!isValidTime(input)) {
+    return "無効な時間です";
+  }
+
+  if (!isValidTotalTime(input, times)) {
+    return "合計の時間が24時間を超えています";
+  }
+
+  return true;
+}
+
+function isValidTimeFormat(input) {
+  return input.includes(":");
+}
+
+const isValidTime = (input) => {
+  const timeRegex = /^([0-9]?[0-9]|2[0-3]):([0-5]?[0-9])$/;
+  return timeRegex.test(input);
+};
+
+function isValidTotalTime(input, times) {
+  let [hours, minutes] = input.split(":").map(Number);
+  let inputTime = hours * 60 + minutes;
+  let totalTime = times.reduce((sum, time) => sum + time, 0);
+  return totalTime + inputTime <= 24 * 60;
+}

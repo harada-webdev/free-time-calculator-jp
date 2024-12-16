@@ -2,7 +2,7 @@
 
 import enquirer from "enquirer";
 import holidayJp from "@holiday-jp/holiday_jp";
-import { validateDate, validateHolidays } from "./validation.js";
+import { validateDate, validateHolidays, validateTime } from "./validation.js";
 
 async function main() {
   console.log("自由時間計算アプリ");
@@ -10,7 +10,9 @@ async function main() {
   const totalDays =
     Math.floor((lastDay - firstDay) / (1000 * 60 * 60 * 24)) + 1;
   const totalHolidays = await countTotalHolidays(firstDay, lastDay, totalDays);
+  const essentialTimes = await getEssentialTimes();
   console.log(totalHolidays);
+  console.log(essentialTimes);
 }
 
 async function getFirstAndLastDay() {
@@ -96,6 +98,36 @@ async function countOtherHolidays(totalDays, holidays) {
   ]);
   const otherHolidays = Number(otherHolidaysAnswer.otherHolidays);
   return otherHolidays;
+}
+
+async function getEssentialTimes() {
+  const essentialTimeQuestions = getEssentialTimeQuestions();
+  const essentialTimes = [];
+  for (const essentialTimeQuestion of essentialTimeQuestions) {
+    const essentialTimeAnswer = await enquirer.prompt({
+      type: "input",
+      name: essentialTimeQuestion.name,
+      message: essentialTimeQuestion.message,
+      validate: (input) => validateTime(input, essentialTimes),
+    });
+    const [hours, minutes] = essentialTimeAnswer[essentialTimeQuestion.name]
+      .split(":")
+      .map(Number);
+    essentialTimes.push(hours * 60 + minutes);
+  }
+  return essentialTimes;
+}
+
+function getEssentialTimeQuestions() {
+  return [
+    { name: "sleepTime", message: "1日の睡眠時間は?(例: 7:30)" },
+    { name: "mealTime", message: "1日の食事時間は?" },
+    { name: "workTime", message: "1日の労働・授業時間は?" },
+    { name: "commuteTime", message: "1日の往復の通勤・通学時間は?" },
+    { name: "houseworkTime", message: "1日の家事の時間は?" },
+    { name: "bathTime", message: "1日の風呂、歯磨きの時間は?" },
+    { name: "otherTime", message: "その他で1日に必要な時間は?" },
+  ];
 }
 
 try {
