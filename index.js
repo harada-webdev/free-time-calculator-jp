@@ -12,7 +12,14 @@ async function main() {
   const totalHolidays = await countTotalHolidays(firstDay, lastDay, totalDays);
   const essentialTimes = await getEssentialTimes();
   console.log(totalHolidays);
-  console.log(essentialTimes);
+  const totalEssentialTime = essentialTimes.reduce(
+    (sum, time) => sum + time,
+    0,
+  );
+  const weekdayFreeTime = 24 * 60 - totalEssentialTime;
+  const workingTime = essentialTimes[2] + essentialTimes[3];
+  const holidayFreeTime = weekdayFreeTime + workingTime;
+  showFreeTimePerDay(weekdayFreeTime, holidayFreeTime);
 }
 
 async function getFirstAndLastDay() {
@@ -128,6 +135,26 @@ function getEssentialTimeQuestions() {
     { name: "bathTime", message: "1日の風呂、歯磨きの時間は?" },
     { name: "otherTime", message: "その他で1日に必要な時間は?" },
   ];
+}
+
+function showFreeTimePerDay(weekdayFreeTime, holidayFreeTime) {
+  const { hours: weekdayFreeHours, minutes: weekdayFreeMinutes } =
+    convertToHoursAndMinutes(weekdayFreeTime);
+  const { hours: holidayFreeHours, minutes: holidayFreeMinutes } =
+    convertToHoursAndMinutes(holidayFreeTime);
+
+  console.log(
+    `\n平日の自由時間: \x1b[33m${weekdayFreeHours.toString().padStart(5)}時間${weekdayFreeMinutes.toString().padStart(2)}分\x1b[0m`,
+  );
+  console.log(
+    `休日の自由時間: \x1b[33m${holidayFreeHours.toString().padStart(5)}時間${holidayFreeMinutes.toString().padStart(2)}分\x1b[0m`,
+  );
+}
+
+function convertToHoursAndMinutes(time) {
+  const hours = Math.floor(time / 60);
+  const minutes = time % 60;
+  return { hours, minutes };
 }
 
 try {
