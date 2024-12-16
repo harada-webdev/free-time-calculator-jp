@@ -11,7 +11,7 @@ async function main() {
     Math.floor((lastDay - firstDay) / (1000 * 60 * 60 * 24)) + 1;
   const totalHolidays = await countTotalHolidays(firstDay, lastDay, totalDays);
   const essentialTimes = await getEssentialTimes();
-  console.log(totalHolidays);
+
   const totalEssentialTime = essentialTimes.reduce(
     (sum, time) => sum + time,
     0,
@@ -20,6 +20,11 @@ async function main() {
   const workingTime = essentialTimes[2] + essentialTimes[3];
   const holidayFreeTime = weekdayFreeTime + workingTime;
   showFreeTimePerDay(weekdayFreeTime, holidayFreeTime);
+
+  const totalWeekdays = totalDays - totalHolidays;
+  const totalFreeTime =
+    weekdayFreeTime * totalWeekdays + holidayFreeTime * totalHolidays;
+  showTotalFreeTime(totalFreeTime, firstDay, lastDay);
 }
 
 async function getFirstAndLastDay() {
@@ -151,10 +156,33 @@ function showFreeTimePerDay(weekdayFreeTime, holidayFreeTime) {
   );
 }
 
+function showTotalFreeTime(totalFreeTime, firstDay, lastDay) {
+  const { hours: totalFreeHours, minutes: totalFreeMinutes } =
+    convertToHoursAndMinutes(totalFreeTime);
+
+  console.log(
+    `\n合計の自由時間: \x1b[33m${totalFreeHours.toString().padStart(5)}時間${totalFreeMinutes.toString().padStart(2)}分\x1b[0m`,
+  );
+  console.log(
+    `(${convertToFormattedDate(firstDay)}から${convertToFormattedDate(lastDay)}まで)`,
+  );
+}
+
 function convertToHoursAndMinutes(time) {
   const hours = Math.floor(time / 60);
   const minutes = time % 60;
   return { hours, minutes };
+}
+
+function convertToFormattedDate(inputDate) {
+  const date = new Date(inputDate);
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  const formattedDate = `${year}年${month}月${day}日`;
+  return formattedDate;
 }
 
 try {
