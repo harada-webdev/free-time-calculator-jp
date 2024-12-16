@@ -37,3 +37,28 @@ function isValidDateOrder(input, state) {
   const lastDay = new Date(input);
   return lastDay >= firstDay;
 }
+
+export function validateHolidays(input, state, totalDays, holidays) {
+  if (!isValidNumberOfHolidays(input, state)) {
+    return "無効な日数です";
+  }
+
+  if (!isNaN(input))
+    if (!isValidTotalHolidays(input, totalDays, holidays)) {
+      return "休日の数が期間の日数を超えています。";
+    }
+
+  return true;
+}
+
+function isValidNumberOfHolidays(input, state) {
+  if (state.name === "holidays") {
+    return input === "donichi" || (!isNaN(input) && input >= 0);
+  } else {
+    return !isNaN(input) && input >= 0;
+  }
+}
+
+function isValidTotalHolidays(input, totalDays, holidays) {
+  return totalDays - input - (holidays || 0) >= 0;
+}
