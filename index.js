@@ -6,11 +6,8 @@ import { validateDate, validateHolidays, validateTime } from "./validation.js";
 
 async function main() {
   console.log("自由時間計算アプリ");
-  const { firstDay, lastDay } = await getFirstAndLastDay();
-  const totalDays =
-    Math.floor((lastDay - firstDay) / (1000 * 60 * 60 * 24)) + 1;
-  const totalHolidays = await countTotalHolidays(firstDay, lastDay, totalDays);
-  const essentialTimes = await getEssentialTimes();
+  const { firstDay, lastDay, totalDays, totalHolidays, essentialTimes } =
+    await getUserInput();
 
   const totalEssentialTime = essentialTimes.reduce(
     (sum, time) => sum + time,
@@ -25,6 +22,28 @@ async function main() {
   const totalFreeTime =
     weekdayFreeTime * totalWeekdays + holidayFreeTime * totalHolidays;
   showTotalFreeTime(totalFreeTime, firstDay, lastDay);
+}
+
+async function getUserInput() {
+  try {
+    const { firstDay, lastDay } = await getFirstAndLastDay();
+    const totalDays =
+      Math.floor((lastDay - firstDay) / (1000 * 60 * 60 * 24)) + 1;
+    const totalHolidays = await countTotalHolidays(
+      firstDay,
+      lastDay,
+      totalDays,
+    );
+    const essentialTimes = await getEssentialTimes();
+    return { firstDay, lastDay, totalDays, totalHolidays, essentialTimes };
+  } catch (error) {
+    if (error === "") {
+      console.error("強制終了しました");
+      process.exit(130);
+    } else {
+      throw error;
+    }
+  }
 }
 
 async function getFirstAndLastDay() {
@@ -185,13 +204,4 @@ function convertToFormattedDate(inputDate) {
   return formattedDate;
 }
 
-try {
-  await main();
-} catch (error) {
-  if (error === "") {
-    console.error("強制終了しました");
-    process.exit(130);
-  } else {
-    throw error;
-  }
-}
+main();
