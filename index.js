@@ -62,10 +62,10 @@ async function getFirstAndLastDay() {
     },
   ]);
 
-  const firstDay = parseInputDate(dateAnswer.firstDay);
-  const lastDay = parseInputDate(dateAnswer.lastDay);
-
-  return { firstDay, lastDay };
+  return {
+    firstDay: parseInputDate(dateAnswer.firstDay),
+    lastDay: parseInputDate(dateAnswer.lastDay),
+  };
 }
 
 function parseInputDate(inputDate) {
@@ -127,8 +127,7 @@ async function countOtherHolidays(totalDays, holidays) {
         validateHolidays(input, state, totalDays, holidays),
     },
   ]);
-  const otherHolidays = Number(otherHolidaysAnswer.otherHolidays);
-  return otherHolidays;
+  return Number(otherHolidaysAnswer.otherHolidays);
 }
 
 async function getEssentialTimes() {
@@ -186,9 +185,7 @@ function showTotalFreeTime(totalFreeTime, firstDay, lastDay) {
 }
 
 function convertToHoursAndMinutes(time) {
-  const hours = Math.floor(time / 60);
-  const minutes = time % 60;
-  return { hours, minutes };
+  return { hours: Math.floor(time / 60), minutes: time % 60 };
 }
 
 function formatDate(inputDate) {
@@ -198,8 +195,7 @@ function formatDate(inputDate) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  const formattedDate = `${year}年${month}月${day}日`;
-  return formattedDate;
+  return `${year}年${month}月${day}日`;
 }
 
 main();
