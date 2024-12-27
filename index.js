@@ -16,12 +16,14 @@ async function main() {
   const weekdayFreeTime = 24 * 60 - totalEssentialTime;
   const workingTime = essentialTimes[2] + essentialTimes[3];
   const holidayFreeTime = weekdayFreeTime + workingTime;
-  showFreeTimePerDay(weekdayFreeTime, holidayFreeTime);
+  showFreeTime("平日", weekdayFreeTime);
+  showFreeTime("休日", holidayFreeTime);
 
   const totalWeekdays = totalDays - totalHolidays;
   const totalFreeTime =
     weekdayFreeTime * totalWeekdays + holidayFreeTime * totalHolidays;
-  showTotalFreeTime(totalFreeTime, firstDay, lastDay);
+  showFreeTime("合計", totalFreeTime);
+  console.log(`(${formatDate(firstDay)}から${formatDate(lastDay)}まで)`);
 }
 
 async function getUserInput() {
@@ -160,32 +162,12 @@ function getEssentialTimeQuestions() {
   ];
 }
 
-function showFreeTimePerDay(weekdayFreeTime, holidayFreeTime) {
-  const { hours: weekdayFreeHours, minutes: weekdayFreeMinutes } =
-    convertToHoursAndMinutes(weekdayFreeTime);
-  const { hours: holidayFreeHours, minutes: holidayFreeMinutes } =
-    convertToHoursAndMinutes(holidayFreeTime);
-
+function showFreeTime(caption, freeTime) {
+  const freeHours = Math.floor(freeTime / 60);
+  const freeMinutes = freeTime % 60;
   console.log(
-    `\n平日の自由時間: \x1b[33m${weekdayFreeHours.toString().padStart(5)}時間${weekdayFreeMinutes.toString().padStart(2)}分\x1b[0m`,
+    `${caption}の自由時間: \x1b[33m${freeHours.toString().padStart(5)}時間${freeMinutes.toString().padStart(2)}分\x1b[0m`,
   );
-  console.log(
-    `休日の自由時間: \x1b[33m${holidayFreeHours.toString().padStart(5)}時間${holidayFreeMinutes.toString().padStart(2)}分\x1b[0m`,
-  );
-}
-
-function showTotalFreeTime(totalFreeTime, firstDay, lastDay) {
-  const { hours: totalFreeHours, minutes: totalFreeMinutes } =
-    convertToHoursAndMinutes(totalFreeTime);
-
-  console.log(
-    `\n合計の自由時間: \x1b[33m${totalFreeHours.toString().padStart(5)}時間${totalFreeMinutes.toString().padStart(2)}分\x1b[0m`,
-  );
-  console.log(`(${formatDate(firstDay)}から${formatDate(lastDay)}まで)`);
-}
-
-function convertToHoursAndMinutes(time) {
-  return { hours: Math.floor(time / 60), minutes: time % 60 };
 }
 
 function formatDate(inputDate) {
