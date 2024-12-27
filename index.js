@@ -182,9 +182,7 @@ function showTotalFreeTime(totalFreeTime, firstDay, lastDay) {
   console.log(
     `\n合計の自由時間: \x1b[33m${totalFreeHours.toString().padStart(5)}時間${totalFreeMinutes.toString().padStart(2)}分\x1b[0m`,
   );
-  console.log(
-    `(${convertToFormattedDate(firstDay)}から${convertToFormattedDate(lastDay)}まで)`,
-  );
+  console.log(`(${formatDate(firstDay)}から${formatDate(lastDay)}まで)`);
 }
 
 function convertToHoursAndMinutes(time) {
@@ -193,7 +191,7 @@ function convertToHoursAndMinutes(time) {
   return { hours, minutes };
 }
 
-function convertToFormattedDate(inputDate) {
+function formatDate(inputDate) {
   const date = new Date(inputDate);
 
   const year = date.getFullYear();
