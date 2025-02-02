@@ -1,0 +1,35 @@
+{
+  "name": "free-time-calculator-jp",
+  "version": "1.0.3",
+  "description": "指定した期間の自由時間を計算する",
+  "main": "index.js",
+  "bin": {
+    "free-time-calculator-jp": "index.js"
+  },
+  "scripts": {
+    "fix": "prettier --write . && eslint --fix .",
+    "lint": "prettier --check . && eslint ."
+  },
+  "keywords": [
+    "自由時間計算"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harada-webdev/free-time-calculator-jp.git"
+  },
+  "author": "harada-webdev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/harada-webdev/free-time-calculator-jp/issues"
+  },
+  "homepage": "https://github.com/harada-webdev/free-time-calculator-jp",
+  "devDependencies": {
+    "eslint": "^9.15.0",
+    "prettier": "^3.4.1"
+  },
+  "type": "module",
+  "dependencies": {
+    "@holiday-jp/holiday_jp": "^2.4.0",
+    "enquirer": "^2.4.1"
+  }
+}
