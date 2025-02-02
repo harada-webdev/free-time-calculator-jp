@@ -43,10 +43,11 @@ export function validateHolidays(input, state, totalDays, holidays) {
     return "無効な日数です";
   }
 
-  if (!isNaN(input))
+  if (!isNaN(input)) {
     if (!isValidTotalHolidays(input, totalDays, holidays)) {
       return "休日の数が期間の日数を超えています。";
     }
+  }
 
   return true;
 }
