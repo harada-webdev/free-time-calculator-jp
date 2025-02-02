@@ -1,6 +1,6 @@
 {
   "name": "free-time-calculator-jp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "指定した期間の自由時間を計算する",
   "main": "index.js",
   "bin": {
