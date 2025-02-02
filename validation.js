@@ -84,8 +84,7 @@ function isValidTimeFormat(input) {
 }
 
 const isValidTime = (input) => {
-  const timeRegex = /^([0-1]?[0-9]|2[0-3]):([0-5]?[0-9])$/;
-  return timeRegex.test(input);
+  return /^([0-1]?[0-9]|2[0-3]):([0-5]?[0-9])$/.test(input);
 };
 
 function isValidTotalTime(input, times) {
